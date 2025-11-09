@@ -1,69 +1,85 @@
-<p align="center">
-  <img title="portainer" src='https://github.com/portainer/portainer/blob/develop/app/assets/images/portainer-github-banner.png?raw=true' />
-</p>
+# Lighthouse
 
-**Portainer Community Edition** is a lightweight service delivery platform for containerized applications that can be used to manage Docker, Swarm, Kubernetes and ACI environments. It is designed to be as simple to deploy as it is to use. The application allows you to manage all your orchestrator resources (containers, images, volumes, networks and more) through a ‘smart’ GUI and/or an extensive API.
+A lightweight, unified dashboard for managing Docker Compose stacks, monitoring servers, and documenting your self-hosted infrastructure.
 
-Portainer consists of a single container that can run on any cluster. It can be deployed as a Linux container or a Windows native container.
+Lighthouse is a stripped-down fork of **Portainer Community Edition**, rebuilt for simplicity, speed, and focus.  
+It combines the essential parts of Portainer with built-in Compose editing, server monitoring, port tracking, and documentation — all in one clear interface.
 
-**Portainer Business Edition** builds on the open-source base and includes a range of advanced features and functions (like RBAC and Support) that are specific to the needs of business users.
+---
 
-- [Compare Portainer CE and Compare Portainer BE](https://www.portainer.io/features)
-- [Take3 – get 3 free nodes of Portainer Business for as long as you want them](https://www.portainer.io/take-3)
-- [Portainer BE install guide](https://academy.portainer.io/install/)
+## Key Features
 
-## Latest Version
+### Compose Management
+- View, edit, and deploy **Docker Compose** projects directly from the web interface.
+- Create new Compose stacks with the **"New Project"** function, which:
+  - Generates a folder under your server’s projects root.
+  - Initializes a `docker-compose.yml` file ready to edit.
+- Inline **YAML editor** with:
+  - Compose schema validation.
+  - Auto-complete for services, ports, networks, and volumes.
+  - Live syntax checking and linting.
+- Validate, dry-run, and deploy directly from the editor.
+- Optional Git versioning of projects for diffs and rollback.
 
-Portainer CE is updated regularly. We aim to do an update release every couple of months.
+---
 
-[![latest version](https://img.shields.io/github/v/release/portainer/portainer?color=%2344cc11&label=Latest%20release&style=for-the-badge)](https://github.com/portainer/portainer/releases/latest)
+### Server Monitoring
+- Lightweight monitoring of all connected servers.
+- Real-time statistics: CPU, memory, disk, and network usage.
+- Uptime and resource summaries per server.
+- No heavy Prometheus/Grafana stack required; includes a simple built-in metrics agent.
 
-## Getting started
+---
 
-- [Deploy Portainer](https://docs.portainer.io/start/install-ce)
-- [Documentation](https://docs.portainer.io)
-- [Contribute to the project](https://docs.portainer.io/contribute/contribute)
+### Multi-Server Management
+- Connect multiple Docker hosts and manage them all from one dashboard.
+- View running containers, stack health, and compose projects across environments.
+- Centralized overview of container counts, resource usage, and alerts.
 
-## Features & Functions
+---
 
-View [this](https://www.portainer.io/features) table to see all of the Portainer CE functionality and compare to Portainer Business.
+### Port Tracker (PortNote-Inspired)
+- Automatically list all ports in use by Docker containers.
+- Detect port collisions before deployment.
+- Add notes or labels to ports (for example, `8080 → nginx proxy`, `5432 → dev database`).
+- Export and search ports across all servers.
 
-## Getting help
+---
 
-Portainer CE is an open source project and is supported by the community. You can buy a supported version of Portainer at portainer.io
+### Documentation Hub
+- Built-in markdown documentation section per project.
+- Ideal for recording setup steps, credentials, update guides, and operational notes.
+- Searchable and linkable from the main dashboard.
 
-Learn more about Portainer's community support channels [here.](https://www.portainer.io/resources/get-help/get-support)
+---
 
-- Issues: https://github.com/portainer/portainer/issues
-- Slack (chat): [https://portainer.io/slack](https://portainer.io/slack)
+### Unified Dashboard
+- A home screen with tiles for key services such as Plex, Gitea, or Nextcloud.
+- Quick-launch links with health indicators.
+- Optional shortcuts to non-Docker services or remote URLs.
 
-You can join the Portainer Community by visiting [https://www.portainer.io/join-our-community](https://www.portainer.io/join-our-community). This will give you advance notice of events, content and other related Portainer content.
+---
 
-## Reporting bugs and contributing
+## Technical Overview
 
-- Want to report a bug or request a feature? Please open [an issue](https://github.com/portainer/portainer/issues/new).
-- Want to help us build **_portainer_**? Follow our [contribution guidelines](https://docs.portainer.io/contribute/contribute) to build it locally and make a pull request.
+### Architecture
+- Core: Go (inherits and simplifies Portainer CE).
+- Frontend: Modernized web UI (React or Vue preferred).
+- Storage: Lightweight embedded database (SQLite or BoltDB).
+- Metrics Agent: Go binary running on each connected server.
+- Compose Support: Compatible with Docker Compose v2.
 
-## Security
+### Server Agent
+Each connected server runs a small agent that:
+- Communicates with the Docker socket.
+- Manages project folders under `/srv/lighthouse` (configurable).
+- Reports metrics and ports in use.
+- Handles file creation and Compose operations securely.
 
-- Here at Portainer, we believe in [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of security issues. If you have found a security issue, please report it to <security@portainer.io>.
+---
 
-## Work for us
+## File Management
+All Compose projects live under the server’s configured root directory.  
+Lighthouse prevents path escapes and uses secure permissions (`0700` for directories and `0600` for files).
 
-If you are a developer, and our code in this repo makes sense to you, we would love to hear from you. We are always on the hunt for awesome devs, either freelance or employed. Drop us a line to success@portainer.io with your details and/or visit our [careers page](https://apply.workable.com/portainer/).
-
-## Privacy
-
-**To make sure we focus our development effort in the right places we need to know which features get used most often. To give us this information we use [Matomo Analytics](https://matomo.org/), which is hosted in Germany and is fully GDPR compliant.**
-
-When Portainer first starts, you are given the option to DISABLE analytics. If you **don't** choose to disable it, we collect anonymous usage as per [our privacy policy](https://www.portainer.io/legal/privacy-policy). **Please note**, there is no personally identifiable information sent or stored at any time and we only use the data to help us improve Portainer.
-
-## Limitations
-
-Portainer supports "Current - 2 docker versions only. Prior versions may operate, however these are not supported.
-
-## Licensing
-
-Portainer is licensed under the zlib license. See [LICENSE](./LICENSE) for reference.
-
-Portainer also contains code from open source projects. See [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) for a list.
+Example structure:
