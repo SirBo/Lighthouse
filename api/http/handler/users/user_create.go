@@ -90,7 +90,7 @@ func (handler *Handler) createUser(tx dataservices.DataStoreTx, payload userCrea
 		return nil, httperror.BadRequest(errMsg, errors.New(errMsg))
 	}
 
-	if settings.AuthenticationMethod == portainer.AuthenticationInternal {
+	if settings.AuthenticationMethod == portainer.AuthenticationInternal || settings.AuthenticationMethod == portainer.AuthenticationNone {
 		if !handler.passwordStrengthChecker.Check(payload.Password) {
 			return nil, httperror.BadRequest("Password does not meet the requirements", nil)
 		}

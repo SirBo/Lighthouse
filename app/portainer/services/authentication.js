@@ -9,12 +9,11 @@ angular.module('portainer.app').factory('Authentication', [
   '$async',
   '$state',
   'Auth',
-  'OAuth',
   'LocalStorage',
   'StateManager',
   'EndpointProvider',
   'ThemeManager',
-  function AuthenticationFactory($async, $state, Auth, OAuth, LocalStorage, StateManager, EndpointProvider, ThemeManager) {
+  function AuthenticationFactory($async, $state, Auth, LocalStorage, StateManager, EndpointProvider, ThemeManager) {
     'use strict';
 
     var user = {};
@@ -24,7 +23,6 @@ angular.module('portainer.app').factory('Authentication', [
 
     return {
       init,
-      OAuthLogin,
       login,
       logout,
       isAuthenticated,
@@ -70,15 +68,6 @@ angular.module('portainer.app').factory('Authentication', [
 
     function init() {
       return $async(initAsync);
-    }
-
-    async function OAuthLoginAsync(code) {
-      await OAuth.validate({ code: code }).$promise;
-      await loadUserData();
-    }
-
-    function OAuthLogin(code) {
-      return $async(OAuthLoginAsync, code);
     }
 
     async function loginAsync(username, password) {

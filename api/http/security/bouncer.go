@@ -305,6 +305,19 @@ func (bouncer *RequestBouncer) mwIsTeamLeader(next http.Handler) http.Handler {
 // A result of a first succeeded token lookup would be used for the authentication.
 func (bouncer *RequestBouncer) mwAuthenticateFirst(tokenLookups []tokenLookup, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if bouncer.isAuthenticationDisabled() {
+			token, err := bouncer.defaultAdminTokenData()
+			if err != nil {
+				log.Error().Err(err).Msg("unable to create token for disabled authentication mode")
+				httperror.WriteError(w, http.StatusInternalServerError, "Unable to fulfill request", err)
+				return
+			}
+
+			ctx := StoreTokenData(r, token)
+			next.ServeHTTP(w, r.WithContext(ctx))
+			return
+		}
+
 		var token *portainer.TokenData
 
 		for _, lookup := range tokenLookups {
@@ -337,6 +350,35 @@ func (bouncer *RequestBouncer) mwAuthenticateFirst(tokenLookups []tokenLookup, n
 		ctx := StoreTokenData(r, token)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func (bouncer *RequestBouncer) isAuthenticationDisabled() bool {
+	settings, err := bouncer.dataStore.Settings().Settings()
+	if err != nil {
+		log.Error().Err(err).Msg("unable to retrieve settings to evaluate authentication mode")
+		return false
+	}
+
+	return settings.AuthenticationMethod == portainer.AuthenticationNone
+}
+
+func (bouncer *RequestBouncer) defaultAdminTokenData() (*portainer.TokenData, error) {
+	admins, err := bouncer.dataStore.User().UsersByRole(portainer.AdministratorRole)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(admins) == 0 {
+		return nil, errors.New("no administrator accounts available")
+	}
+
+	admin := admins[0]
+
+	return &portainer.TokenData{
+		ID:       admin.ID,
+		Username: admin.Username,
+		Role:     portainer.AdministratorRole,
+	}, nil
 }
 
 // JWTAuthLookup looks up a valid bearer in the request.

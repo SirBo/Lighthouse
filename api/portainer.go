@@ -1863,7 +1863,8 @@ const (
 var SupportedFeatureFlags = []featureflags.Feature{"hsts", "csp"}
 
 const (
-	_ AuthenticationMethod = iota
+	// AuthenticationNone represents a mode where Lighthouse does not enforce authentication.
+	AuthenticationNone AuthenticationMethod = iota
 	// AuthenticationInternal represents the internal authentication method (authentication against Portainer API)
 	AuthenticationInternal
 	// AuthenticationLDAP represents the LDAP authentication method (authentication against a LDAP server)

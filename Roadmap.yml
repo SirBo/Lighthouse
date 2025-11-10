@@ -1,0 +1,167 @@
+# Lighthouse Project Issues
+
+This document lists all proposed GitHub issues grouped by development phase, following the project roadmap.
+
+---
+
+## Phase 1 – Foundation (Core Compose Manager)
+
+### Initialize project structure
+- Fork Portainer CE and remove non-essential components (RBAC, Edge, Swarm, OAuth, etc.).
+- Set up Go module and build pipeline.
+
+### Simplify Docker management API
+- Strip down Portainer’s backend to focus only on container, image, and volume endpoints.
+- Remove unused business logic.
+
+### Basic UI redesign
+- Clean up Portainer CE UI to focus on container list, images, and stacks only.
+- Update branding to “Lighthouse.”
+
+### Implement lightweight authentication
+- Add single admin user or optional no-auth mode for local installs.
+
+### Server connection configuration
+- Allow connection to local Docker socket and remote Docker hosts.
+- Test with TCP and socket connections.
+
+---
+
+## Phase 2 – Compose Editor and Deployment
+
+### Implement project creation workflow
+- Add “New Project” button.
+- Create folder under `/srv/lighthouse/<project>` with default `docker-compose.yml`.
+
+### Build inline YAML editor
+- Add syntax highlighting, auto-completion, and validation for Compose schema.
+
+### Add Compose validation endpoint
+- Use `docker compose config` to validate YAML before deploy.
+
+### Enable Compose deployment actions
+- Implement `Up`, `Down`, `Restart`, and `Pull` via backend agent.
+- Show live logs in UI.
+
+### Add port collision detection
+- Parse all running containers and warn on overlapping exposed ports.
+
+---
+
+## Phase 3 – Multi-Server Management and Metrics
+
+### Create Lighthouse Agent service
+- Build Go-based lightweight agent for remote Docker servers.
+- Handle metrics collection and Compose file operations.
+
+### Implement agent registration and authentication
+- Use API token or certificate-based auth for secure server registration.
+
+### Multi-server overview in UI
+- Add “Servers” page showing CPU, memory, and uptime per host.
+
+### System metrics integration
+- Display real-time resource usage per server.
+
+---
+
+## Phase 4 – Port Management and Notes
+
+### Global ports list view
+- Aggregate all exposed ports across servers.
+- Display container, service, and stack info.
+
+### Add port note feature
+- Allow adding text notes/tags to ports.
+- Save to backend and persist across sessions.
+
+### Port collision scanner
+- Automatically flag port conflicts across all hosts.
+
+### Export ports data
+- Add export to JSON or CSV for port registry.
+
+---
+
+## Phase 5 – Documentation System
+
+### Add per-project documentation panel
+- Generate `README.md` beside each `docker-compose.yml`.
+- Add markdown editor to edit docs in UI.
+
+### Global documentation index
+- List all project docs in one searchable view.
+
+### Link documentation to stacks and containers
+- Cross-reference documentation with Compose projects.
+
+---
+
+## Phase 6 – Unified Dashboard
+
+### Implement home dashboard
+- Show key stats: running containers, stopped containers, CPU/memory usage.
+- Display favorite services as tiles.
+
+### Add service tile linking
+- Parse ports and labels to auto-generate “quick access” buttons.
+
+### Health indicator for services
+- Mark tiles as “running,” “stopped,” or “unhealthy” based on container state.
+
+### Add customizable quick links
+- Allow adding external URLs to dashboard manually.
+
+---
+
+## Phase 7 – Templates and Automation
+
+### Create built-in Compose templates
+- Add NGINX, Postgres, Traefik, Watchtower, and Hello World templates.
+
+### Template deployment wizard
+- Allow user to fill variables (ports, volume paths, passwords) before deployment.
+
+### Git integration for projects
+- Auto-commit changes to `docker-compose.yml`.
+- Enable “Revert” and “View Diff.”
+
+### Quick Deploy from Template Library
+- Allow one-click deployment from predefined templates.
+
+---
+
+## Phase 8 – Quality and Extensibility
+
+### Write REST API documentation
+- Generate OpenAPI spec and publish to `/docs`.
+
+### Add plugin/module architecture
+- Define extension points for community plugins.
+
+### Theme customization
+- Implement light/dark mode and custom color options.
+
+### Build CI/CD pipeline
+- Automated Docker image builds and version tagging.
+
+### Write full setup documentation
+- Installation, agent setup, and contribution guide.
+
+---
+
+## General / Ongoing
+
+### Branding and logo
+- Design minimal Lighthouse logo and favicon.
+
+### Security review
+- Audit file operations and Docker socket access.
+
+### Performance testing
+- Benchmark with multiple agents and large Compose stacks.
+
+### Documentation website
+- Build static site for docs, roadmap, and API reference.
+
+---

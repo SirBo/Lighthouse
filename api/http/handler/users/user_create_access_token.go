@@ -129,5 +129,5 @@ func (handler *Handler) usesInternalAuthentication(userid portainer.UserID) (boo
 		return false, fmt.Errorf("unable to retrieve the settings from the database: %w", err)
 	}
 
-	return settings.AuthenticationMethod == portainer.AuthenticationInternal, nil
+	return settings.AuthenticationMethod == portainer.AuthenticationInternal || settings.AuthenticationMethod == portainer.AuthenticationNone, nil
 }

@@ -31,7 +31,10 @@ export function useValidation(): SchemaOf<FormValues> {
       teams: array(number().required()).required(),
     });
 
-    if (authMethod === AuthenticationMethod.Internal) {
+    if (
+      authMethod === AuthenticationMethod.Internal ||
+      authMethod === AuthenticationMethod.None
+    ) {
       return base.concat(
         passwordValidation(settingsQuery.data?.RequiredPasswordLength)
       );

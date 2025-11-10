@@ -113,6 +113,36 @@ func Test_mwAuthenticateFirst(t *testing.T) {
 	}
 }
 
+func Test_mwAuthenticateFirst_NoAuth(t *testing.T) {
+	_, store := datastore.MustNewTestStore(t, true, true)
+
+	jwtService, err := jwt.NewService("1h", store)
+	require.NoError(t, err, "failed to create a copy of service")
+
+	apiKeyService := apikey.NewAPIKeyService(nil, nil)
+	bouncer := NewRequestBouncer(store, jwtService, apiKeyService)
+
+	settings, err := store.Settings().Settings()
+	require.NoError(t, err)
+	settings.AuthenticationMethod = portainer.AuthenticationNone
+	require.NoError(t, store.Settings().UpdateSettings(settings))
+
+	err = store.User().Create(&portainer.User{
+		ID:       1,
+		Username: "admin",
+		Role:     portainer.AdministratorRole,
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	rr := httptest.NewRecorder()
+
+	h := bouncer.mwAuthenticateFirst(nil, testHandler200)
+	h.ServeHTTP(rr, req)
+
+	require.Equal(t, http.StatusOK, rr.Code)
+}
+
 func Test_extractKeyFromCookie(t *testing.T) {
 	is := assert.New(t)
 

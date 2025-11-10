@@ -30,6 +30,7 @@ export function CreateUserAccessToken() {
 
   const requirePassword =
     settings.data?.AuthenticationMethod === AuthenticationMethod.Internal ||
+    settings.data?.AuthenticationMethod === AuthenticationMethod.None ||
     user.Id === 1;
 
   return (

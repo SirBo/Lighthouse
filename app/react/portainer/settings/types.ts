@@ -67,6 +67,10 @@ export interface OAuthSettings {
 
 export enum AuthenticationMethod {
   /**
+   * None represents a mode where authentication is disabled
+   */
+  None = 0,
+  /**
    * Internal represents the internal authentication method (authentication against Portainer API)
    */
   Internal = 1,
@@ -169,7 +173,7 @@ export interface PublicSettingsResponse {
   LogoURL: string;
   /** The content in plaintext used to display in the login page. Will hide when value is empty string (only on BE) */
   CustomLoginBanner: string;
-  /** Active authentication method for the Portainer instance. Valid values are: 1 for internal, 2 for LDAP, or 3 for oauth */
+  /** Active authentication method for the Portainer instance. Valid values are: 0 for none, 1 for internal, 2 for LDAP, or 3 for oauth */
   AuthenticationMethod: AuthenticationMethod;
   /** The minimum required length for a password of any user when using internal auth mode */
   RequiredPasswordLength: number;

@@ -73,7 +73,8 @@ export function NewUserForm() {
                 <Form className="form-horizontal">
                   <UsernameField authMethod={authMethod} />
 
-                  {authMethod === AuthenticationMethod.Internal && (
+                  {(authMethod === AuthenticationMethod.Internal ||
+                    authMethod === AuthenticationMethod.None) && (
                     <>
                       <PasswordField />
 

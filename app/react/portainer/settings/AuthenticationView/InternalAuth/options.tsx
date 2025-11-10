@@ -1,4 +1,4 @@
-import { ArrowDownCircle } from 'lucide-react';
+import { ArrowDownCircle, ShieldOff } from 'lucide-react';
 
 import { FeatureId } from '@/react/portainer/feature-flags/enums';
 import Microsoft from '@/assets/ico/vendor/microsoft.svg?c';
@@ -6,6 +6,14 @@ import Ldap from '@/assets/ico/ldap.svg?c';
 import OAuth from '@/assets/ico/oauth.svg?c';
 
 export const options = [
+  {
+    id: 'auth_none',
+    icon: ShieldOff,
+    iconType: 'badge',
+    label: 'Disabled',
+    description: 'Use when access is restricted outside Lighthouse',
+    value: 0,
+  },
   {
     id: 'auth_internal',
     icon: ArrowDownCircle,

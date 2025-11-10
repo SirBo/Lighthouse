@@ -21,46 +21,8 @@
       <div class="panel panel-default" ng-if="!ctrl.state.loginInProgress">
         <div class="panel-body">
           <!-- login form -->
-          <form class="simple-box-form form-horizontal">
+          <form class="simple-box-form form-horizontal" ng-submit="ctrl.authenticateUser()">
             <div class="form-group">
-              <div class="col-sm-12" style="display: flex; justify-content: center" ng-if="ctrl.state.showOAuthLogin">
-                <a ng-href="{{ ctrl.OAuthLoginURI }}">
-                  <div class="btn btn-primary btn-lg btn-block" ng-if="ctrl.state.OAuthProvider === 'Microsoft'">
-                    <pr-icon icon="'svg-microsoft'"></pr-icon>
-                    Login with Microsoft
-                  </div>
-                  <div class="btn btn-primary btn-lg btn-block" ng-if="ctrl.state.OAuthProvider === 'Google'">
-                    <pr-icon icon="'svg-google'"></pr-icon>
-                    Login with Google
-                  </div>
-                  <div class="btn btn-primary btn-lg btn-block" ng-if="ctrl.state.OAuthProvider === 'Github'">
-                    <pr-icon icon="'svg-github'"></pr-icon>
-                    Login with GitHub
-                  </div>
-                  <div class="btn btn-primary btn-lg btn-block" ng-if="ctrl.state.OAuthProvider === 'OAuth'">
-                    <pr-icon icon="'log-in'"></pr-icon>
-                    Login with OAuth
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            <!-- divider -->
-            <div class="form-group" ng-if="ctrl.state.showOAuthLogin">
-              <div class="col-sm-12" style="display: flex; align-items: center; justify-content: center">
-                <div class="striketext small text-muted" style="display: flex; align-items: center; justify-content: center; width: 90%">or</div>
-              </div>
-            </div>
-
-            <!-- use internal auth button -->
-            <div class="form-group" ng-if="ctrl.state.showOAuthLogin && !ctrl.state.showStandardLogin">
-              <div class="col-sm-12" style="display: flex; justify-content: center">
-                <div class="btn btn-primary btn-md btn-block" style="margin-left: 2px" ng-click="ctrl.toggleStandardLogin()"> Use internal authentication </div>
-              </div>
-            </div>
-
-            <!-- !username input -->
-            <div ng-if="ctrl.state.showStandardLogin">
               <div class="pb-2">Username</div>
               <input
                 id="username"
@@ -75,7 +37,7 @@
             </div>
 
             <!-- password input -->
-            <div ng-if="ctrl.state.showStandardLogin">
+            <div class="mt-4">
               <div class="pb-2">Password</div>
               <div class="relative">
                 <input
@@ -104,13 +66,11 @@
               </div>
             </div>
 
-            <div class="form-group overflow-auto" ng-if="ctrl.state.showStandardLogin">
-              <!-- login button -->
+            <div class="form-group overflow-auto mt-4">
               <div class="col-sm-12 d-flex py-1">
                 <button
                   type="submit"
                   class="btn btn-primary btn-lg btn-block"
-                  ng-click="ctrl.authenticateUser()"
                   button-spinner="ctrl.state.loginInProgress"
                   ng-disabled="ctrl.state.loginInProgress"
                   data-cy="auth-loginButton"
